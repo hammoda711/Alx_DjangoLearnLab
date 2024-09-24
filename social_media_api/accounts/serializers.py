@@ -35,4 +35,19 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('Invalid username or password.')
         attrs['user'] = user 
         return attrs #attrs={user:pass}
-    
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username','email', 'password', 'bio', 'profile_picture', 'followers']
+        read_only_fields = ['email', 'followers']
+        
+        #validate the updated data
+        '''def update(self, instance, validated_data):
+            # Update profile fields
+            instance.bio = validated_data.get('bio', instance.bio)
+            instance.profile_picture = validated_data.get('profile_picture', instance.profile_picture)
+            instance.save()
+            return instance
+            '''
