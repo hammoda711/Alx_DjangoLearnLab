@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     #my apps
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
     'posts',
-    
     'notifications',
 ]
 
@@ -132,6 +132,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #my settings
 AUTH_USER_MODEL = 'accounts.CustomUser'
 REST_FRAMEWORK = {
+        'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
         'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',  # Optional
