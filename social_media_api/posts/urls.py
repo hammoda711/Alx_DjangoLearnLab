@@ -1,10 +1,11 @@
 from django.urls import include, path
-from .views import PostViewSet
+from .views import CommentViewSet, PostViewSet
 from rest_framework import routers
 
 
 router = routers.DefaultRouter()
-router.register(r'', PostViewSet, basename='posts')
+router.register(r'posts', PostViewSet, basename='posts')
+router.register(r'posts/(?P<post_pk>[^/.]+)/comments', CommentViewSet, basename='comment')
 
 
 urlpatterns = [
