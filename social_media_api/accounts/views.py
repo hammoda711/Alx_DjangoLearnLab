@@ -60,6 +60,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
 
 class FollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = FollowUserSerializer
 
