@@ -9,7 +9,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = ['username','password','email','bio','followers','profile_picture',]
+        fields = ['id','username','password','email','bio','followers','profile_picture',]
 
     def create(self,validated_data):
         user = User.objects.create_user(
@@ -51,3 +51,13 @@ class ProfileSerializer(serializers.ModelSerializer):
             instance.save()
             return instance
             '''
+        
+class FollowUserSerializer(serializers.Serializer):
+    followed_user_id = serializers.IntegerField()
+    # validates whether the user with the given ID exists.
+    def validate_followed_user_id(self, value):
+        try:
+            followed_user = User.objects.get(pk=value)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("User does not exist.")
+        return value

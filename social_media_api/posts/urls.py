@@ -1,5 +1,5 @@
 from django.urls import include, path
-from .views import CommentViewSet, PostViewSet
+from .views import CommentViewSet, FeedView, PostViewSet
 from rest_framework import routers
 
 
@@ -10,5 +10,6 @@ router.register(r'posts/(?P<post_pk>[^/.]+)/comments', CommentViewSet, basename=
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('feed/', FeedView.as_view(), name='feed'),
 
 ]
