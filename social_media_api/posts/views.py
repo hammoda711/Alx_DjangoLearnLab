@@ -1,11 +1,13 @@
-from rest_framework import viewsets, permissions, serializers,generics
+from django.shortcuts import get_object_or_404
+from rest_framework import viewsets, permissions, serializers, generics, status
 from rest_framework.filters import SearchFilter
 #from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Post,Comment
-from .serializers import CommentSerializer, PostSerializer
+from .models import Like, Post,Comment
+from .serializers import CommentSerializer, LikeSerializer, PostSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
 # Create your views here.
 class IsAuthorOrReadOnly(permissions.BasePermission):
@@ -62,3 +64,27 @@ class FeedView(generics.ListAPIView):
 
         return Post.objects.filter(author__in=followed_users).order_by('-created_at')
 
+class LikePostView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = LikeSerializer
+
+    def post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+        if created:
+            return Response({"message": "Liked post."}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"message": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+
+class UnlikePostView(generics.DestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+
+        try:
+            like = Like.objects.get(user=request.user, post=post)
+            like.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Like.DoesNotExist:
+            return Response({"error": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)

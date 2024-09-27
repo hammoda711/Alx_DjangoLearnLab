@@ -1,4 +1,4 @@
-from .models import Comment,Post
+from .models import Comment, Like,Post
 from rest_framework import serializers
 
 
@@ -35,4 +35,11 @@ class CommentSerializer(serializers.ModelSerializer):
             request = self.context.get('request')
             validated_data['author'] = request.user
             return super().create(validated_data)
-            
+
+
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ['user', 'post']
+        read_only_fields = ['user']
