@@ -2,10 +2,10 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
-User = get_user_model
 # Create your models here.
+User = get_user_model()
 
-class notification(models.Model):
+class Notification(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
     actor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actor_notifications')
     verb = models.CharField(max_length=255)  # Description of the action
