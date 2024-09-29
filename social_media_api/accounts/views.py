@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404
+
+from notifications.utils import create_notification
 from .serializers import ProfileSerializer, RegisterSerializer, TokenSerializer, LoginSerializer,FollowUserSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import generics, status, permissions
@@ -59,6 +61,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
 
 
+# Follow user view
 class FollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = FollowUserSerializer
@@ -66,6 +69,7 @@ class FollowUserView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         followed_user_id = kwargs.get('user_id')
         followed_user = get_object_or_404(User, id=followed_user_id)
+
         # Check if the user is trying to follow themselves
         if followed_user == request.user:
             return Response({"error": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
@@ -73,8 +77,13 @@ class FollowUserView(generics.GenericAPIView):
         # Check if the user is already following the target user
         if followed_user in request.user.following.all():
             return Response({"error": "You are already following this user."}, status=status.HTTP_400_BAD_REQUEST)
+
         # Add the followed user to the current user's following list
         request.user.following.add(followed_user)
+
+        # Generate a notification for the followed user
+        create_notification(recipient=followed_user, actor=request.user, verb='followed you', target=None)
+
         return Response({"message": "You are now following this user."}, status=status.HTTP_201_CREATED)
     
 
