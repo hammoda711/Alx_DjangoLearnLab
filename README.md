@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The **Social Media API** is a Django-based backend project that provides a RESTful API for a social media platform. Users can register, authenticate, create posts, comment on posts, follow other users, view a personalized feed of posts from users they follow and also get notification comments and likes on your posts, new followers, and new posts from users who use are following.
+The **Social Media API** is a Django-based backend project that provides a RESTful API for a social media platform. Users can register, authenticate, create posts, comment on posts, follow other users, view a personalized feed of posts from users they follow and also get notification comments and likes on your posts, new followers, and new posts from users who user is following.
 
 ---
 
@@ -320,4 +320,3 @@ For any questions or contributions, please contact:
 
 - **Author:** ***Mohamed Taher***
 - **Email:** [Gmail]([mo.taher717@gmail.com])
-- **GitHub:** [Mohamed Taher]([https://github.com/hammoda711])
