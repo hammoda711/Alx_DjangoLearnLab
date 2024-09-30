@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-m)2(+*t+ke#v0hm70opsa=$j&dbztl(4#d-w*(xxk2(&7$p0*@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [] #such as herokuapp
 
 
 # Application definition
@@ -82,9 +82,13 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+       'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'social_db',
+        'USER': 'social_user',
+        'PASSWORD': '1234',  # Replace with the actual password
+        'HOST': 'localhost',  # or your database server IP
+        'PORT': '5432',  # Default PostgreSQL port
     }
 }
 
