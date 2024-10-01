@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-
+from rest_framework.views import APIView
 from notifications.utils import create_notification
 from .serializers import ProfileSerializer, RegisterSerializer, TokenSerializer, LoginSerializer,FollowUserSerializer
 from django.contrib.auth import get_user_model
@@ -50,6 +50,20 @@ class LoginView(generics.CreateAPIView):
             },
             'token': token.key,
         }, status=201)
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        # Get the token of the authenticated user
+        try:
+            token = Token.objects.get(user=request.user)
+            # Delete the token to log the user out
+            token.delete()
+            return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
+        except Token.DoesNotExist:
+            return Response({"error": "Token not found."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
